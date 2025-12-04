@@ -70,11 +70,10 @@ const Chains = () => {
             
             {vendor?.firm?.map((item) => {
               // Choose image URL
-              const imageUrl = item.image?.startsWith("http")
+             /*  const imageUrl = item.image?.startsWith("http")
                 ? item.image                     // Cloudinary URL
                 : `${API_URL}/uploads/${item.image}`; // Local fallback
-
-            //   console.log("IMAGE:", imageUrl);
+ */              const imageUrl = item.image;
 
               return (
                 <Link
@@ -83,6 +82,7 @@ const Chains = () => {
                   key={item._id}
                 >
                   <div className="firmImage">
+                    <strong style= {{ textAlign: "center", display: "block"  }}>{item.firmName}</strong>
                     <img src={imageUrl} alt={item.firmName} />
                   </div>
                 </Link>

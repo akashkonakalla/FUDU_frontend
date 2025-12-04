@@ -4,18 +4,17 @@ import { itemData } from '../data'
 const ItemsDisplay = () => {
     const [displayItem, setDisplayItem] = useState(itemData)
 
-
-  return (
+    return (
         <div className="itemSection">
-            {displayItem.map((item)=>{
-                return(
-                    <div className="gallery">
+            {displayItem.map((item, index) => {
+                return (
+                    <div className="gallery" key={index}>
                         <img src={item.item_img} alt={item.item_img} />
                     </div>
                 )
             })}
         </div>
-  )
+    )
 }
 
-export default ItemsDisplay
+export default ItemsDisplay;

@@ -37,7 +37,8 @@ const ProductMenu = () => {
                 <div>{item.description}</div>
               </div>
               <div className="productGroup">
-                <img src={`${API_URL}/uploads/${item.image}`} />
+                <img src={item.image} alt={item.productName} />
+
                 <div className="addButton">ADD</div>
               </div>
             </div>
