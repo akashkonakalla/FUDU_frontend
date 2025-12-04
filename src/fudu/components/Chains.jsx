@@ -1,102 +1,98 @@
-import React, {useState, useEffect} from 'react'
-import { API_URL } from '../api'
-import { FaRegArrowAltCircleRight } from "react-icons/fa";
-import { FaRegArrowAltCircleLeft } from "react-icons/fa";
-import { MagnifyingGlass } from 'react-loader-spinner'
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { API_URL } from "../api";
+import { FaRegArrowAltCircleRight, FaRegArrowAltCircleLeft } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Chains = () => {
-    const [vendorData, setVendorData] = useState([]);
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const [loading, setLoading] = useState(true)
+  const [vendorData, setVendorData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const vendorFirmHandler = async()=>{
-            try {
-                    const response = await fetch(`${API_URL}/vendor/all-vendors?order=desc`)
-                    const newData = await response.json()
-                        setVendorData(newData);
-                        console.log("this is api Data ", newData)
-                        setLoading(false)
-            } catch (error) {
-                alert("failed to fetch data")
-                console.error("failed to fetch data")
-                setLoading(true)
-            }
+  const vendorFirmHandler = async () => {
+    try {
+      const response = await fetch(`${API_URL}/vendor/all-vendors?order=desc`);
+      const newData = await response.json();
+      setVendorData(newData);
+      console.log("API DATA:", newData);
+      setLoading(false);
+    } catch (error) {
+      alert("Failed to fetch data");
+      console.error(error);
+      setLoading(false);
     }
-            useEffect(()=>{
-                vendorFirmHandler()
-            }, [])
+  };
 
-const handleScroll =(direction)=>{
-        const gallery = document.getElementById("chainGallery");
-        const scrollAmount = 500;
+  useEffect(() => {
+    vendorFirmHandler();
+  }, []);
 
-        if(direction === "left"){
-            gallery.scrollTo({
-                left: gallery.scrollLeft -scrollAmount,
-                behavior: "smooth"
-            })
-        }else if( direction === "right"){
-            gallery.scrollTo({
-                left: gallery.scrollLeft + scrollAmount,
-                behavior: "smooth"
-            })
-        }
+  const handleScroll = (direction) => {
+    const gallery = document.getElementById("chainGallery");
+    const scrollAmount = 500;
 
-}
-
+    gallery.scrollTo({
+      left:
+        direction === "left"
+          ? gallery.scrollLeft - scrollAmount
+          : gallery.scrollLeft + scrollAmount,
+      behavior: "smooth",
+    });
+  };
 
   return (
-      <div className='mediaChainSection'>
-  <div className="loaderSection">
-  {loading && (
-    <div className="spinnerLoaderWrapper">
-      <div className="spinnerLoader"></div>
-      <p className="spinnerLoaderText">Loading…</p>
-    </div>
-  )}
-</div>
+    <div className="mediaChainSection">
 
+      {/* Loader */}
+      {loading && (
+        <div className="loaderSection">
+          <div className="spinnerLoaderWrapper">
+            <div className="spinnerLoader"></div>
+            <p className="spinnerLoaderText">Loading…</p>
+          </div>
+        </div>
+      )}
+
+      {/* Buttons */}
       <div className="btnSection">
-        <button onClick={()=>handleScroll("left")}>
-        <FaRegArrowAltCircleLeft className='btnIcons'/>
+        <button onClick={() => handleScroll("left")}>
+          <FaRegArrowAltCircleLeft className="btnIcons" />
         </button>
-        <button onClick={()=>handleScroll("right")}>
-        <FaRegArrowAltCircleRight className='btnIcons'/>
+        <button onClick={() => handleScroll("right")}>
+          <FaRegArrowAltCircleRight className="btnIcons" />
         </button>
       </div>
-            <h3 className='chainTitle'>Top restaurant chains in Hyderabad</h3>
-        <section className="chainSection" id="chainGallery" onScroll={(e)=>setScrollPosition(e.target.scrollf)}>
-            {vendorData.vendors && vendorData.vendors.map((vendor)=>{
-                   return(
-                    <>
 
-                     <div className="vendorBox">
-                        {vendor.firm.map((item)=>{
-                            return(
-                               <>
-                                <div>
-                                    {item.firmName}
-                                  
-                                </div>
-                        <Link to={`/products/${item._id}/${item.firmName}`} className="link" key={item._id}>
-                         
-                        <div className="firmImage">
-                            {console.log("IMAGE FROM API:", item.image)}
-                                     <img src= {`${API_URL}/uploads/${item.image}`} />
-                                </div>
-                        </Link>
-                               </>
+      <h3 className="chainTitle">Top restaurant chains in Hyderabad</h3>
 
-                            )
-                        })}
-                    </div>
-                    </>
-                   )
+      {/* Main section */}
+      <section className="chainSection" id="chainGallery">
+        {vendorData?.vendors?.map((vendor) => (
+          <div className="vendorBox" key={vendor._id}>
+            
+            {vendor?.firm?.map((item) => {
+              // Choose image URL
+              const imageUrl = item.image?.startsWith("http")
+                ? item.image                     // Cloudinary URL
+                : `${API_URL}/uploads/${item.image}`; // Local fallback
+
+            //   console.log("IMAGE:", imageUrl);
+
+              return (
+                <Link
+                  to={`/products/${item._id}/${item.firmName}`}
+                  className="link"
+                  key={item._id}
+                >
+                  <div className="firmImage">
+                    <img src={imageUrl} alt={item.firmName} />
+                  </div>
+                </Link>
+              );
             })}
-        </section>
-      </div>
-  )
-}
+          </div>
+        ))}
+      </section>
+    </div>
+  );
+};
 
-export default Chains
+export default Chains;
