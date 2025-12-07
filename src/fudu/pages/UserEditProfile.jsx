@@ -7,26 +7,25 @@ const UserEditProfile = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  // -------------------
+  // LOAD USER PROFILE
+  // -------------------
   const loadProfile = async () => {
     const token = localStorage.getItem("userToken");
-    if (!token) {
-      return navigate("/login");
-    }
+    if (!token) return navigate("/login");
 
     try {
       const res = await fetch(`${API_URL}/user/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await res.json();
 
       if (res.ok) {
         setForm({
-          name: data.profile.name || "",
-          phone: data.profile.phone || "",
-          address: data.profile.address || "",
+          name: data.profile?.name || "",
+          phone: data.profile?.phone || "",
+          address: data.profile?.address || "",
         });
       } else {
         setMessage(data.error || "Failed to load profile");
@@ -40,14 +39,15 @@ const UserEditProfile = () => {
     loadProfile();
   }, []);
 
+  // -------------------
+  // UPDATE USER PROFILE
+  // -------------------
   const handleUpdate = async (e) => {
     e.preventDefault();
     setMessage("");
 
     const token = localStorage.getItem("userToken");
-    if (!token) {
-      return navigate("/login");
-    }
+    if (!token) return navigate("/login");
 
     try {
       const res = await fetch(`${API_URL}/user/profile`, {
@@ -56,7 +56,11 @@ const UserEditProfile = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          address: form.address.trim(),
+        }),
       });
 
       const data = await res.json();

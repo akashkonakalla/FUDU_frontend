@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { API_URL } from "../api";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 
 const UserLogin = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+
+  // ⭐ Access updateCartCount from context
+  const { updateCartCount } = useContext(CartContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,10 +25,14 @@ const UserLogin = () => {
       const data = await res.json();
 
       if (res.ok) {
-        // save token
+        // Save token
         localStorage.setItem("userToken", data.token);
         setMessage("✅ Login successful!");
-        setTimeout(() => navigate("/profile"), 800);
+
+        // 🔥 Update global cart count instantly
+        updateCartCount();
+
+        setTimeout(() => navigate("/"), 800);
       } else {
         setMessage(`❌ ${data.error || "Login failed"}`);
       }

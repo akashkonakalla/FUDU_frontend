@@ -7,16 +7,15 @@ const Chains = () => {
   const [vendorData, setVendorData] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch vendors + firms
   const vendorFirmHandler = async () => {
     try {
       const response = await fetch(`${API_URL}/vendor/all-vendors?order=desc`);
       const newData = await response.json();
-      setVendorData(newData);
-      console.log("API DATA:", newData);
+      setVendorData(newData?.vendors || []);
       setLoading(false);
     } catch (error) {
-      alert("Failed to fetch data");
-      console.error(error);
+      console.error("Vendor fetch failed:", error);
       setLoading(false);
     }
   };
@@ -25,15 +24,16 @@ const Chains = () => {
     vendorFirmHandler();
   }, []);
 
+  // Scroll buttons
   const handleScroll = (direction) => {
     const gallery = document.getElementById("chainGallery");
-    const scrollAmount = 500;
+    if (!gallery) return;
 
+    const scrollAmount = 500;
     gallery.scrollTo({
-      left:
-        direction === "left"
-          ? gallery.scrollLeft - scrollAmount
-          : gallery.scrollLeft + scrollAmount,
+      left: direction === "left"
+        ? gallery.scrollLeft - scrollAmount
+        : gallery.scrollLeft + scrollAmount,
       behavior: "smooth",
     });
   };
@@ -51,7 +51,7 @@ const Chains = () => {
         </div>
       )}
 
-      {/* Buttons */}
+      {/* Scroll Buttons */}
       <div className="btnSection">
         <button onClick={() => handleScroll("left")}>
           <FaRegArrowAltCircleLeft className="btnIcons" />
@@ -63,31 +63,41 @@ const Chains = () => {
 
       <h3 className="chainTitle">Top restaurant chains in Hyderabad</h3>
 
-      {/* Main section */}
+      {/* Firm display section */}
       <section className="chainSection" id="chainGallery">
-        {vendorData?.vendors?.map((vendor) => (
+        {vendorData.map((vendor) => (
           <div className="vendorBox" key={vendor._id}>
-            
-            {vendor?.firm?.map((item) => {
-              // Choose image URL
-             /*  const imageUrl = item.image?.startsWith("http")
-                ? item.image                     // Cloudinary URL
-                : `${API_URL}/uploads/${item.image}`; // Local fallback
- */              const imageUrl = item.image;
+            {vendor?.firm?.length > 0 ? (
+              vendor.firm.map((item) => {
+                const imageUrl = item.image || "/images/default-food.png"; // fallback
 
-              return (
-                <Link
-                  to={`/products/${item._id}/${item.firmName}`}
-                  className="link"
-                  key={item._id}
-                >
-                  <div className="firmImage">
-                    <strong style= {{ textAlign: "center", display: "block"  }}>{item.firmName}</strong>
-                    <img src={imageUrl} alt={item.firmName} />
-                  </div>
-                </Link>
-              );
-            })}
+                return (
+                  <Link
+                    to={`/products/${item._id}/${item.firmName}`}
+                    className="link"
+                    key={item._id}
+                  >
+                    <div className="firmImage">
+                      <strong
+                        style={{
+                          textAlign: "center",
+                          display: "block",
+                          fontSize: "16px",
+                          marginBottom: "5px",
+                        }}
+                      >
+                        {item.firmName}
+                      </strong>
+                      <img src={imageUrl} alt={item.firmName} />
+                    </div>
+                  </Link>
+                );
+              })
+            ) : (
+              <p className="noFirmText" key={vendor._id + "-nofirm"}>
+                No firm added
+              </p>
+            )}
           </div>
         ))}
       </section>

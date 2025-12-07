@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import { API_URL } from "../api";
-
 import { useNavigate } from "react-router-dom";
 
 const UserRegister = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/user/register`, {
@@ -22,13 +29,19 @@ const UserRegister = () => {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage("✅ Registered successfully! Redirecting to login…");
+        setMessage("✅ Registered successfully! Redirecting…");
+
+        // Clear form
+        setForm({ name: "", email: "", password: "" });
+
         setTimeout(() => navigate("/login"), 1000);
       } else {
         setMessage(`❌ ${data.error || "Registration failed"}`);
       }
     } catch (err) {
       setMessage("❌ Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,12 +74,13 @@ const UserRegister = () => {
           required
         />
 
-        <button className="authButton" type="submit">
-          Register
+        <button className="authButton" type="submit" disabled={loading}>
+          {loading ? "Please wait…" : "Register"}
         </button>
       </form>
 
       <p className="authMsg">{message}</p>
+
       <p style={{ marginTop: "10px" }}>
         Already have an account?{" "}
         <span

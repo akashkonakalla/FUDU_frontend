@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { API_URL } from "../api";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+
+  // ⭐ Load cart count when user visits profile
+  const { updateCartCount } = useContext(CartContext);
 
   const fetchProfile = async () => {
     const token = localStorage.getItem("userToken");
@@ -25,8 +29,12 @@ const UserProfile = () => {
 
       if (res.ok) {
         setProfile(data.profile);
+
+        // 🔥 Update cart count every time profile loads
+        updateCartCount();
       } else {
         setMessage(data.error || "Failed to load profile");
+
         if (res.status === 401) {
           localStorage.removeItem("userToken");
           navigate("/login");
@@ -47,7 +55,11 @@ const UserProfile = () => {
   };
 
   if (!profile && !message) {
-    return <p style={{ textAlign: "center", marginTop: "40px" }}>Loading profile…</p>;
+    return (
+      <p style={{ textAlign: "center", marginTop: "40px" }}>
+        Loading profile…
+      </p>
+    );
   }
 
   return (
@@ -67,7 +79,11 @@ const UserProfile = () => {
             <button onClick={() => navigate("/profile/edit")}>
               Edit Profile
             </button>
-            <button onClick={handleLogout} style={{ background: "#d9534f" }}>
+
+            <button
+              onClick={handleLogout}
+              style={{ background: "#d9534f", color: "white" }}
+            >
               Logout
             </button>
           </div>
