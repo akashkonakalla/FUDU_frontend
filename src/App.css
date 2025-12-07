@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
 body {
     font-family: "Poppins", sans-serif;
     margin: 0;
@@ -7,89 +9,143 @@ body {
 }
 
 .topBarSection {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 100px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    width: 90%;
-    min-width: 80%;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 50px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 100;
 }
 
 .companyTitle h2 {
-    color: orangered;
-    text-decoration: none;
+  color: #FF9013;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
+.searchBar input {
+  padding: 8px 12px;
+  width: 260px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+ /* Button section */
+.userAuth {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-right: 100px;
+}
+
+
+.loginBtn {
+  background-color: #F46036;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.loginBtn:hover {
+  background-color: #d94c28;
+  transform: translateY(-2px);
+}
+
+.registerBtn {
+  background-color: #34A853;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 10px;
+  transition: 0.3s ease;
+}
+.registerBtn:hover {
+  background-color: #2c8e46;
+  transform: translateY(-2px);
+}
 
 /* item section */
 
 .itemSection {
-    display: flex;
-    width: 100%;
-    margin-top: 100px;
+  display: flex;
+  justify-content: space-around;
+  padding: 60px 0px 0px;
 }
 
 .gallery {
-    width: 150px;
+  width: 120px;
+  text-align: center;
 }
 
 .gallery img {
-    width: 100%;
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 
 /* landingPage */
 
-.landingSection {
-    padding: 0 120px;
+.landingSection > * {
+  margin-top: 35px;
 }
 
+.landingSection {
+  padding: 0 50px;
+}
 
 /* chainseCtion */
 
 .chainSection {
-    display: flex;
-    overflow-x: hidden;
-    position: relative;
-    height: auto;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 40px;
+  padding-bottom: 10px;
+}
+
+.chainSection::-webkit-scrollbar {
+  display: none;
 }
 
 .vendorBox {
-    border-radius: 10px;
+  flex-shrink: 0;
+  text-align: center;
 }
 
 .vendorBox img {
-    width: 350px;
+    width: 280px;
     height: 220px;
-    flex: 0 0 auto;
-    margin-right: 30px;
-    object-fit: cover;
-    border-radius: 10px;
+  object-fit:fill;
+  border-radius: 12px;
 }
 
 .btnSection {
-    display: flex;
-    justify-content: flex-end;
-    position: relative;
-    top: 50px;
-    right: 10px;
-    gap: 10px;
-}
-
-.btnSection button {
-    border: none;
-    background: none;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
+  gap: 10px;
+  padding-top: 0px;
 }
 
 .btnIcons {
-    font-size: x-large;
+  padding-top: 4px;
+  font-size: 20px;
+  cursor: pointer;
 }
+
 
 
 /* firmSection */
@@ -102,36 +158,44 @@ body {
 }
 
 .filterButtons {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
+  margin: 10px 0 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
 
 .filterButtons button {
-    width: 10rem;
-    padding: 5px 0;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: medium;
+  font-weight: bold;
+  border: 1px solid #F5F1DC;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
+.filterButtons button:hover {
+  background: #FF5656;
+}
+
 
 .firmGroup {
     position: relative;
 }
 
 .firmGroup img {
-    width: 240px;
-    height: 180px;
-    flex: 0 0 auto;
-    margin-right: 30px;
-    object-fit: cover;
-    border-radius: 10px;
+  width: 280px;
+  height: 180px;
+  object-fit: fill;
+  border-radius: 10px;
 }
 
 .firmDetails {
-    padding-left: 10px;
+  padding-top: 8px;
 }
 
 .firmOffer {
     width: 100%;
-    max-width: 85%;
+    max-width: 80%;
     position: absolute;
     bottom: 5px;
     padding-left: 10px;
@@ -157,8 +221,8 @@ body {
 }
 
 .activeButton {
-    background-color: darkblue;
-    color: white;
+    background-color: #FF9013;
+    color: rgb(255, 255, 255);
 }
 
 

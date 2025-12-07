@@ -61,7 +61,7 @@ const Chains = () => {
         </button>
       </div>
 
-      <h3 className="chainTitle">Top restaurant chains in Hyderabad</h3>
+      <h3 className="chainTitle">Top restaurants in Hyderabad</h3>
 
       {/* Firm display section */}
       <section className="chainSection" id="chainGallery">
