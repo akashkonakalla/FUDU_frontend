@@ -3,35 +3,40 @@ import { API_URL } from "../api";
 
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const UserRegister = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setMessage("");
 
-    const response = await fetch(`${API_URL}/user/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch(`${API_URL}/user/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    const result = await response.json();
+      const data = await res.json();
 
-    if (response.ok) {
-      setMessage("✅ Registered successfully!");
-      setTimeout(() => navigate("/login"), 1000);
-    } else {
-      setMessage("❌ " + result.error);
+      if (res.ok) {
+        setMessage("✅ Registered successfully! Redirecting to login…");
+        setTimeout(() => navigate("/login"), 1000);
+      } else {
+        setMessage(`❌ ${data.error || "Registration failed"}`);
+      }
+    } catch (err) {
+      setMessage("❌ Something went wrong. Please try again.");
     }
   };
 
   return (
     <div className="authContainer">
-      <h2>Create Account</h2>
+      <h2>User Register</h2>
 
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleRegister} className="authForm">
         <input
           type="text"
           placeholder="Name"
@@ -56,12 +61,23 @@ const Register = () => {
           required
         />
 
-        <button className="authButton" type="submit">Register</button>
+        <button className="authButton" type="submit">
+          Register
+        </button>
       </form>
 
       <p className="authMsg">{message}</p>
+      <p style={{ marginTop: "10px" }}>
+        Already have an account?{" "}
+        <span
+          style={{ color: "#4fa94d", cursor: "pointer" }}
+          onClick={() => navigate("/login")}
+        >
+          Login
+        </span>
+      </p>
     </div>
   );
 };
 
-export default Register;
+export default UserRegister;
