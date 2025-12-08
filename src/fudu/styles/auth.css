@@ -44,6 +44,7 @@
 
 .auth-title h2 {
     background: linear-gradient(135deg, #fff, #e0e7ff);
+    background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     font-size: 2rem;
