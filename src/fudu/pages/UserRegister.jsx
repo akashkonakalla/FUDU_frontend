@@ -1,23 +1,16 @@
 import React, { useState } from "react";
 import { API_URL } from "../api";
 import { useNavigate } from "react-router-dom";
+import "../styles/auth.css";
 
 const UserRegister = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage("");
-    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/user/register`, {
@@ -29,67 +22,75 @@ const UserRegister = () => {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage("✅ Registered successfully! Redirecting…");
-
-        // Clear form
-        setForm({ name: "", email: "", password: "" });
-
-        setTimeout(() => navigate("/login"), 1000);
+        setMessage("🎉 Registered Successfully!");
+        setTimeout(() => navigate("/login"), 900);
       } else {
-        setMessage(`❌ ${data.error || "Registration failed"}`);
+        setMessage(`❌ ${data.error}`);
       }
-    } catch (err) {
-      setMessage("❌ Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+    } catch {
+      setMessage("❌ Something went wrong.");
     }
   };
 
   return (
-    <div className="authContainer">
-      <h2>User Register</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-title">
+          <h2>Create Account</h2>
+          <p>Join FUDU today</p>
+        </div>
 
-      <form onSubmit={handleRegister} className="authForm">
-        <input
-          type="text"
-          placeholder="Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
-        />
+        <form onSubmit={handleRegister}>
+          <div className="form-group">
+            <div className="input-box">
+              <input
+                type="text"
+                required
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+              <label>Name</label>
+            </div>
+          </div>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
-        />
+          <div className="form-group">
+            <div className="input-box">
+              <input
+                type="email"
+                required
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+              <label>Email</label>
+            </div>
+          </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          required
-        />
+          <div className="form-group">
+            <div className="input-box">
+              <input
+                type="password"
+                required
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+              />
+              <label>Password</label>
+            </div>
+          </div>
 
-        <button className="authButton" type="submit" disabled={loading}>
-          {loading ? "Please wait…" : "Register"}
-        </button>
-      </form>
+          <button className="auth-btn" type="submit">
+            Register
+          </button>
 
-      <p className="authMsg">{message}</p>
+          <p className="authMsg">{message}</p>
 
-      <p style={{ marginTop: "10px" }}>
-        Already have an account?{" "}
-        <span
-          style={{ color: "#4fa94d", cursor: "pointer" }}
-          onClick={() => navigate("/login")}
-        >
-          Login
-        </span>
-      </p>
+          <p className="switch-text">
+            Already have an account?
+            <span className="switch-link" onClick={() => navigate("/login")}>
+              {" "}Login
+            </span>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

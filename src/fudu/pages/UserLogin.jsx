@@ -1,15 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { API_URL } from "../api";
 import { useNavigate } from "react-router-dom";
-import { CartContext } from "../../context/CartContext";
+import "../styles/auth.css";
 
 const UserLogin = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-
-  // ⭐ Access updateCartCount from context
-  const { updateCartCount } = useContext(CartContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,59 +22,64 @@ const UserLogin = () => {
       const data = await res.json();
 
       if (res.ok) {
-        // Save token
         localStorage.setItem("userToken", data.token);
         setMessage("✅ Login successful!");
-
-        // 🔥 Update global cart count instantly
-        updateCartCount();
-
-        setTimeout(() => navigate("/"), 800);
+        setTimeout(() => navigate("/"), 700);
       } else {
-        setMessage(`❌ ${data.error || "Login failed"}`);
+        setMessage(`❌ ${data.error}`);
       }
-    } catch (err) {
-      setMessage("❌ Something went wrong. Please try again.");
+    } catch {
+      setMessage("❌ Something went wrong.");
     }
   };
 
   return (
-    <div className="authContainer">
-      <h2>User Login</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-title">
+          <h2>Welcome Back</h2>
+          <p>Login to continue</p>
+        </div>
 
-      <form onSubmit={handleLogin} className="authForm">
-        <input
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
-        />
+        <form onSubmit={handleLogin}>
+          <div className="form-group">
+            <div className="input-box">
+              <input
+                type="email"
+                required
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+              <label>Email</label>
+            </div>
+          </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          required
-        />
+          <div className="form-group">
+            <div className="input-box">
+              <input
+                type="password"
+                required
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+              />
+              <label>Password</label>
+            </div>
+          </div>
 
-        <button className="authButton" type="submit">
-          Login
-        </button>
-      </form>
+          <button className="auth-btn" type="submit">
+            Login
+          </button>
 
-      <p className="authMsg">{message}</p>
+          <p className="authMsg">{message}</p>
 
-      <p style={{ marginTop: "10px" }}>
-        New user?{" "}
-        <span
-          style={{ color: "#4fa94d", cursor: "pointer" }}
-          onClick={() => navigate("/register")}
-        >
-          Register
-        </span>
-      </p>
+          <p className="switch-text">
+            New user?
+            <span className="switch-link" onClick={() => navigate("/register")}>
+              {" "}Register
+            </span>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

@@ -44,6 +44,24 @@ body {
     margin-right: 100px;
 }
 
+.logoutBtn { 
+  background: linear-gradient(135deg, #FFA239, #FF5656);
+  color: white;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.25s ease-in-out;
+}
+
+.logoutBtn:hover {
+    transform: scale(1.05);
+  opacity: 0.9;
+}
+
+
 
 .loginBtn {
   background-color: #F46036;
@@ -434,3 +452,5 @@ body {
         transform: rotate(360deg);
     }
 }
+
+
