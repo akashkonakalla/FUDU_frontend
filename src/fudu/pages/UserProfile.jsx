@@ -1,96 +1,102 @@
-import React, { useEffect, useState, useContext } from "react";
-import { API_URL } from "../api";
-import { useNavigate } from "react-router-dom";
-import { CartContext } from "../../context/CartContext";
+  import React, { useEffect, useState, useContext } from "react";
+  import { API_URL } from "../api";
+  import { useNavigate } from "react-router-dom";
+  import { CartContext } from "../../context/CartContext";
+  import BackButton from "../components/BackButton";
 
-const UserProfile = () => {
-  const [profile, setProfile] = useState(null);
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate();
+  const UserProfile = () => {
+    const [profile, setProfile] = useState(null);
+    const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
-  // ⭐ Load cart count when user visits profile
-  const { updateCartCount } = useContext(CartContext);
+    //mLoad cart count when user visits profile
+    const { updateCartCount } = useContext(CartContext);
 
-  const fetchProfile = async () => {
-    const token = localStorage.getItem("userToken");
-    if (!token) {
-      setMessage("❌ Please login to view profile");
-      return navigate("/login");
-    }
-
-    try {
-      const res = await fetch(`${API_URL}/user/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setProfile(data.profile);
-
-        // 🔥 Update cart count every time profile loads
-        updateCartCount();
-      } else {
-        setMessage(data.error || "Failed to load profile");
-
-        if (res.status === 401) {
-          localStorage.removeItem("userToken");
-          navigate("/login");
-        }
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("userToken");
+      if (!token) {
+        setMessage("❌ Please login to view profile");
+        return navigate("/login");
       }
-    } catch (err) {
-      setMessage("❌ Something went wrong.");
+
+      try {
+        const res = await fetch(`${API_URL}/user/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          setProfile(data.profile);
+
+          // Update cart count every time profile loads
+          updateCartCount();
+        } else {
+          setMessage(data.error || "Failed to load profile");
+
+          if (res.status === 401) {
+            localStorage.removeItem("userToken");
+            navigate("/login");
+          }
+        }
+      } catch (err) {
+        setMessage("❌ Something went wrong.");
+      }
+    };
+
+    useEffect(() => {
+      fetchProfile();
+    }, []);
+
+    const handleLogout = () => {
+      localStorage.removeItem("userToken");
+      navigate("/login");
+    };
+
+    if (!profile && !message) {
+      return (
+        <p style={{ textAlign: "center", marginTop: "40px" }}>
+          Loading profile…
+        </p>
+      );
     }
-  };
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("userToken");
-    navigate("/login");
-  };
-
-  if (!profile && !message) {
     return (
-      <p style={{ textAlign: "center", marginTop: "40px" }}>
-        Loading profile…
-      </p>
-    );
-  }
+      <div className="profileContainer" style={{padding:"20px"}}>
+        <div style={{ paddingTop: 10 }}>
+        <BackButton />
+      </div>
+        
+        <h2>User Profile</h2>
 
-  return (
-    <div className="profileContainer">
-      <h2>User Profile</h2>
+        {message && <p className="authMsg">{message}</p>}
 
-      {message && <p className="authMsg">{message}</p>}
+        {profile && (
+          <div className="profileCard">
+            <p><strong>Name:</strong> {profile.name}</p>
+            <p><strong>Email:</strong> {profile.email}</p>
+            <p><strong>Phone:</strong> {profile.phone || "Not set"}</p>
+            <p><strong>Address:</strong> {profile.address || "Not set"}</p>
 
-      {profile && (
-        <div className="profileCard">
-          <p><strong>Name:</strong> {profile.name}</p>
-          <p><strong>Email:</strong> {profile.email}</p>
-          <p><strong>Phone:</strong> {profile.phone || "Not set"}</p>
-          <p><strong>Address:</strong> {profile.address || "Not set"}</p>
+            <div className="profileActions">
+              <button onClick={() => navigate("/profile/edit")}
+                style={{background: "#34A853", color:"white", border:"2px solid black", cursor:"pointer"}}>
+                Edit Profile
+              </button>
 
-          <div className="profileActions">
-            <button onClick={() => navigate("/profile/edit")}>
-              Edit Profile
-            </button>
-
-            <button
-              onClick={handleLogout}
-              style={{ background: "#d9534f", color: "white" }}
-            >
-              Logout
-            </button>
+              <button
+                onClick={handleLogout}
+                style={{ background: "#d9534f", color: "white", marginLeft: "10px" , border:"2px solid black",cursor: "pointer"}}
+              >
+                Logout
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
-};
+        )}
+      </div>
+    );
+  };
 
-export default UserProfile;
+  export default UserProfile;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../api";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../components/BackButton";
 
 const UserEditProfile = () => {
   const [form, setForm] = useState({ name: "", phone: "", address: "" });
@@ -78,6 +79,7 @@ const UserEditProfile = () => {
 
   return (
     <div className="authContainer">
+      <BackButton />
       <h2>Edit Profile</h2>
 
       <form onSubmit={handleUpdate} className="authForm">

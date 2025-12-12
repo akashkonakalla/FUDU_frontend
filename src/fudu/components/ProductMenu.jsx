@@ -3,6 +3,7 @@ import { API_URL } from "../api";
 import { useParams, useNavigate } from "react-router-dom";
 import TopBar from "./TopBar";
 import { CartContext } from "../../context/CartContext";
+import BackButton from "./BackButton";
 
 const ProductMenu = () => {
   const [products, setProducts] = useState([]);
@@ -29,7 +30,7 @@ const ProductMenu = () => {
     productHandler();
   }, []);
 
-  // ⭐ ADD TO CART FUNCTION
+  //ADD TO CART FUNCTION
   const addToCart = async (productId) => {
     const token = localStorage.getItem("userToken");
 
@@ -52,7 +53,7 @@ const ProductMenu = () => {
       const data = await res.json();
 
       if (res.ok) {
-        updateCartCount(); // instantly updates cart
+        updateCartCount(); 
         alert("Item added to cart!");
       } else {
         alert(data.error || "Failed to add item");
@@ -66,6 +67,9 @@ const ProductMenu = () => {
   return (
     <>
       <TopBar />
+      <div style={{ padding: 10, position:"fixed" }}>
+        <BackButton />
+      </div>
 
       <section className="productSection">
         <h3 style={{ marginBottom: "15px" }}>{firmName}</h3>

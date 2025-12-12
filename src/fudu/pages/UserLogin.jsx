@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { API_URL } from "../api";
 import { useNavigate } from "react-router-dom";
 import "../styles/auth.css";
+import BackButton from "../components/BackButton";
+
 
 const UserLogin = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -36,11 +38,12 @@ const UserLogin = () => {
   return (
     <div className="auth-page">
       <div className="auth-card">
+        <BackButton />
         <div className="auth-title">
           <h2>Welcome Back</h2>
           <p>Login to continue</p>
         </div>
-
+        
         <form onSubmit={handleLogin}>
           <div className="form-group">
             <div className="input-box">

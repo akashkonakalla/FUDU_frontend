@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { API_URL } from "../api";
 import { useNavigate } from "react-router-dom";
 import "../styles/auth.css";
+import BackButton from "../components/BackButton";
 
 const UserRegister = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -35,6 +36,7 @@ const UserRegister = () => {
   return (
     <div className="auth-page">
       <div className="auth-card">
+        <BackButton />
         <div className="auth-title">
           <h2>Create Account</h2>
           <p>Join FUDU today</p>
