@@ -40,7 +40,7 @@ body {
 .userAuth {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 1px;
     margin-right: 100px;
 }
 
@@ -85,7 +85,6 @@ body {
   border-radius: 6px;
   font-weight: 600;
   text-decoration: none;
-  margin-left: 10px;
   transition: 0.3s ease;
 }
 .registerBtn:hover {
@@ -98,7 +97,15 @@ body {
 .itemSection {
   display: flex;
   justify-content: space-around;
-  padding: 60px 0px 0px;
+  padding-top: 8%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 40px;
+  padding-bottom: 10px;
+}
+
+.itemSection::-webkit-scrollbar {
+  display: none;
 }
 
 .gallery {

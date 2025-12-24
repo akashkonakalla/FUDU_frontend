@@ -95,7 +95,7 @@ const Chains = () => {
               })
             ) : (
               <p className="noFirmText" key={vendor._id + "-nofirm"}>
-                No firm added
+                {/* No firm added */}
               </p>
             )}
           </div>
