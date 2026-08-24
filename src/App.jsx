@@ -8,7 +8,7 @@ import UserEditProfile from './fudu/pages/UserEditProfile';
 import ProductMenu from './fudu/components/ProductMenu'
 
 import { CartProvider } from './context/CartContext';
-import CartPage from './fudu/pages/CartPage';   // ⬅️ CREATE THIS PAGE
+import CartPage from './fudu/pages/CartPage'; //Pending
 
 import './App.css'
 
